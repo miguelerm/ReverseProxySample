@@ -6,11 +6,13 @@ namespace ReverseProxy
 {
     public class Startup
     {
-        public void Configuration(IAppBuilder appBuilder)
+        public void Configuration(IAppBuilder app)
         {
+            app.MapSignalR();
+
             var httpconfig = new HttpConfiguration();
             RouteConfig.RegisterRoutes(httpconfig.Routes);
-            appBuilder.UseWebApi(httpconfig);
+            app.UseWebApi(httpconfig);
         }
     }
 }

@@ -9,13 +9,7 @@ namespace ReverseProxy.Handlers
 {
     public class ProxyHandler : DelegatingHandler
     {
-        private static readonly ConcurrentDictionary<string, ConcurrentQueue<int>> hosts = new ConcurrentDictionary<string, ConcurrentQueue<int>>
-        (
-            new Dictionary<string, ConcurrentQueue<int>>()
-            {
-                { "demo", new ConcurrentQueue<int>(new int [] { 8002, 8003 }) }
-            }
-        );
+        public static readonly ConcurrentDictionary<string, ConcurrentQueue<int>> Hosts = new ConcurrentDictionary<string, ConcurrentQueue<int>>();
 
 
         // basado en https://blog.kloud.com.au/2013/11/24/do-it-yourself-web-api-proxy/
@@ -51,12 +45,12 @@ namespace ReverseProxy.Handlers
                 return NotFound(request);
             }
 
-            if (!hosts.ContainsKey(servicio))
+            if (!Hosts.ContainsKey(servicio))
             {
                 return NotFound(request);
             }
 
-            if (!hosts.TryGetValue(servicio, out ports))
+            if (!Hosts.TryGetValue(servicio, out ports))
             {
                 return ServiceUnavailable(request);
             }
@@ -86,7 +80,7 @@ namespace ReverseProxy.Handlers
 
             var forwardUri = new UriBuilder("http", "localhost", port, forwardPath, request.RequestUri.Query);
             request.RequestUri = forwardUri.Uri;
-
+            Console.WriteLine("Url: {0}", request.RequestUri);
             // Evitar violacion de protocolo, enviando explicitamente el content nulo para GET y TRACE.
             if (request.Method == HttpMethod.Get || request.Method == HttpMethod.Trace) request.Content = null;
 
