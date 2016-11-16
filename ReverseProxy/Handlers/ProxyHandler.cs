@@ -17,6 +17,8 @@ namespace ReverseProxy.Handlers
             }
         );
 
+
+        // basado en https://blog.kloud.com.au/2013/11/24/do-it-yourself-web-api-proxy/
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
             ConcurrentQueue<int> ports = null;
