@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Owin.Hosting;
+using System;
 
 namespace ReverseProxy
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            using (WebApp.Start<Startup>("http://+:8001"))
+            {
+                Console.WriteLine("Poxy Iniciado");
+                Console.ReadLine();
+            }
         }
     }
 }
